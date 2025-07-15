@@ -2,7 +2,7 @@
   "default": {
     "paths": ["tests/features/"],
 
-    "require": ["tests/steps/*.js"],
+    "require": ["tests/step-definition/*.ts"],
 
     "formatOptions": {
       "snippetInterface": "async-await"

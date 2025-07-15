@@ -1,25 +1,22 @@
-const {
+import {
   Given,
   When,
   Then,
   Before,
   After,
   setDefaultTimeout,
-} = require("@cucumber/cucumber");
-
-const { chromium, expect } = require("@playwright/test");
-
-const { Page } = require("playwright");
+} from "@cucumber/cucumber";
+import { chromium, expect } from "@playwright/test";
+import type { Browser, Page } from "playwright";
 
 setDefaultTimeout(60 * 1000);
 
-let page, browser;
+let browser: Browser;
+let page: Page;
 
 Before(async function () {
   browser = await chromium.launch({ headless: false });
-
   const context = await browser.newContext();
-
   page = await context.newPage();
 });
 
@@ -27,44 +24,41 @@ Given("User navigates to the Browserstack Homepage", async () => {
   await page.goto("https://www.browserstack.com/");
 });
 
-When("User clicks on Product Menu", async function () {
+When("User clicks on Product Menu", async () => {
   await page.locator('button[aria-label="Products"]').waitFor();
-
   await page.locator('button[aria-label="Products"]').click();
 });
 
-Then("It should show Web Testing Product", async function () {
+Then("It should show Web Testing Product", async () => {
   await page
     .locator('div[aria-label="Products"] button[title="Web Testing"]')
     .waitFor();
 
-  expect(
-    await page
-      .locator('div[aria-label="Products"] button[title="Web Testing"] span')
-      .isVisible()
-  ).toBeTruthy();
+  const isVisible = await page
+    .locator('div[aria-label="Products"] button[title="Web Testing"] span')
+    .isVisible();
+
+  expect(isVisible).toBeTruthy();
 });
 
-Given("User Navigates to Browserstack Homepage", async function () {
+Given("User Navigates to Browserstack Homepage", async () => {
   await page.goto("https://www.browserstack.com/");
 });
 
-When("User clicks on Pricing Menu", async function () {
+When("User clicks on Pricing Menu", async () => {
   await page.locator('a[title="Pricing"]').click();
 });
 
-Then("It should Display correct Product lists in left Nav", async function () {
-  var leftNavProducts = await page
+Then("It should Display correct Product lists in left Nav", async () => {
+  const leftNavProducts = await page
     .locator('div[id="sidenav__list"]')
     .textContent();
-
-  var productArray = await leftNavProducts.split("\n").map((item) => {
-    return item.trim();
-  });
+  const productArray =
+    leftNavProducts?.split("\n").map((item) => item.trim()) || [];
 
   expect(productArray).toEqual(expect.arrayContaining(["Live", "App Live"]));
 });
 
-After(async function () {
+After(async () => {
   await browser.close();
 });
