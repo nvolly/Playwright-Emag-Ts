@@ -14,46 +14,46 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 515845599
+              "duration": 380396700
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 5,
+            "line": 4,
             "name": "User navigates to the Browserstack Homepage",
             "match": {
-              "location": "tests\\step-definition\\homepage.step.ts:23"
+              "location": "tests\\stepdefinitions\\homepage.steps.ts:14"
             },
             "result": {
               "status": "passed",
-              "duration": 570803300
+              "duration": 559064899
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 7,
+            "line": 5,
             "name": "User clicks on Product Menu",
             "match": {
-              "location": "tests\\step-definition\\homepage.step.ts:27"
+              "location": "tests\\stepdefinitions\\homepage.steps.ts:18"
             },
             "result": {
               "status": "passed",
-              "duration": 766429000
+              "duration": 124368599
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 9,
+            "line": 6,
             "name": "It should show Web Testing Product",
             "match": {
-              "location": "tests\\step-definition\\homepage.step.ts:32"
+              "location": "tests\\stepdefinitions\\homepage.steps.ts:23"
             },
             "result": {
               "status": "passed",
-              "duration": 20199199
+              "duration": 18545399
             }
           },
           {
@@ -61,7 +61,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 233620500
+              "duration": 420069100
             }
           }
         ],
@@ -72,7 +72,7 @@
         "description": "",
         "id": "homepage-functionality;verify-pricing-product-lists",
         "keyword": "Scenario",
-        "line": 11,
+        "line": 8,
         "name": "Verify Pricing Product Lists",
         "steps": [
           {
@@ -80,46 +80,46 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 402278800
+              "duration": 378164499
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 13,
-            "name": "User Navigates to Browserstack Homepage",
+            "line": 9,
+            "name": "User navigates to the Browserstack Homepage",
             "match": {
-              "location": "tests\\step-definition\\homepage.step.ts:44"
+              "location": "tests\\stepdefinitions\\homepage.steps.ts:14"
             },
             "result": {
               "status": "passed",
-              "duration": 598311999
+              "duration": 545785500
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 15,
+            "line": 10,
             "name": "User clicks on Pricing Menu",
             "match": {
-              "location": "tests\\step-definition\\homepage.step.ts:48"
+              "location": "tests\\stepdefinitions\\homepage.steps.ts:33"
             },
             "result": {
               "status": "passed",
-              "duration": 1460868199
+              "duration": 1199620799
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 17,
+            "line": 11,
             "name": "It should Display correct Product lists in left Nav",
             "match": {
-              "location": "tests\\step-definition\\homepage.step.ts:52"
+              "location": "tests\\stepdefinitions\\homepage.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 106614300
+              "duration": 89237099
             }
           },
           {
@@ -127,7 +127,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 163819800
+              "duration": 234016700
             }
           }
         ],
