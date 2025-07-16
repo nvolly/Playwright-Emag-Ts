@@ -49,28 +49,21 @@ jobs:
       - name: Run Cucumber tests with JUnit report
         run: npx cucumber-js --format junit:reports/cucumber-results.xml
 
-      - name: Upload Playwright test results artifact
+      - name: Install junit-report-merger globally
+        run: npm install -g junit-report-merger
+
+      - name: Merge Playwright and Cucumber reports
+        run: junit-report-merger -o merged-report.xml test-results/*.xml reports/*.xml
+
+      - name: Upload merged test report artifact
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-junit
-          path: test-results/*.xml
+          name: merged-junit-report
+          path: merged-report.xml
 
-      - name: Upload Cucumber test results artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: cucumber-junit
-          path: reports/cucumber-results.xml
-
-      - name: Report Playwright test results to GitHub Checks
+      - name: Report merged test results to GitHub Checks
         uses: dorny/test-reporter@v1
         with:
-          name: Playwright Tests
-          path: test-results/*.xml
-          reporter: junit
-
-      - name: Report Cucumber test results to GitHub Checks
-        uses: dorny/test-reporter@v1
-        with:
-          name: Cucumber Tests
-          path: reports/cucumber-results.xml
+          name: E2E Combined Tests
+          path: merged-report.xml
           reporter: junit
