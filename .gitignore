@@ -15,7 +15,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # Environment secrets
-.env
+.env/
+.env.prod
 .env.*
 *.secret
 

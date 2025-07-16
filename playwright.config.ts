@@ -1,9 +1,10 @@
 import { defineConfig } from "@playwright/test";
-import * as dotenv from "dotenv";
+import dotenv from "dotenv";
+import path from "path";
 
-dotenv.config({
-  path: `./env/.env.${process.env.ENV}`,
-});
+if (process.env.ENV !== "ci") {
+  dotenv.config({ path: path.resolve(__dirname, ".env/.env.prod") });
+}
 
 export default defineConfig({
   globalSetup: "./tests/global.setup.ts",

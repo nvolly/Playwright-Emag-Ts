@@ -12,7 +12,7 @@
   "devDependencies": {
     "@cucumber/cucumber": "^11.3.0",
     "@playwright/test": "^1.54.1",
-    "@types/node": "^24.0.10",
+    "@types/node": "^24.0.14",
     "@types/prompt-sync": "^4.2.3",
     "prompt-sync": "^4.2.0",
     "ts-node": "^10.9.2",
