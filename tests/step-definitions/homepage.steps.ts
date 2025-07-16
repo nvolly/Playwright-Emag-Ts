@@ -1,15 +1,6 @@
-import {
-  Given,
-  When,
-  Then,
-  Before,
-  After,
-  setDefaultTimeout,
-} from "@cucumber/cucumber";
+import { Given, When, Then, Before, After } from "@cucumber/cucumber";
 import { chromium, expect } from "@playwright/test";
 import type { Browser, Page } from "playwright";
-
-setDefaultTimeout(60 * 1000);
 
 let browser: Browser;
 let page: Page;
@@ -33,16 +24,10 @@ Then("It should show Web Testing Product", async () => {
   await page
     .locator('div[aria-label="Products"] button[title="Web Testing"]')
     .waitFor();
-
   const isVisible = await page
     .locator('div[aria-label="Products"] button[title="Web Testing"] span')
     .isVisible();
-
   expect(isVisible).toBeTruthy();
-});
-
-Given("User Navigates to Browserstack Homepage", async () => {
-  await page.goto("https://www.browserstack.com/");
 });
 
 When("User clicks on Pricing Menu", async () => {
@@ -55,7 +40,6 @@ Then("It should Display correct Product lists in left Nav", async () => {
     .textContent();
   const productArray =
     leftNavProducts?.split("\n").map((item) => item.trim()) || [];
-
   expect(productArray).toEqual(expect.arrayContaining(["Live", "App Live"]));
 });
 
