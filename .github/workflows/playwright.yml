@@ -40,20 +40,32 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Playwright tests with JUnit report
-        run: npx playwright test --reporter=junit --output=test-results
+      - name: Create report folders
+        run: |
+          mkdir -p test-results
+          mkdir -p reports
 
-      - name: Prepare reports folder
-        run: mkdir -p reports
+      - name: Run Playwright tests with JUnit report
+        run: npx playwright test
 
       - name: Run Cucumber tests with JUnit report
-        run: npx cucumber-js --format junit:reports/cucumber-results.xml
+        run: npx cucumber-js --format junit:reports/cucumber-report.xml
 
-      - name: Install junit-report-merger globally
+      - name: Verify test result files
+        run: |
+          echo "Playwright report:"
+          ls -lh test-results || echo "Missing Playwright report"
+          echo "Cucumber report:"
+          ls -lh reports || echo "Missing Cucumber report"
+
+      - name: Install junit-report-merger
         run: npm install -g junit-report-merger
 
       - name: Merge Playwright and Cucumber reports
-        run: junit-report-merger -o merged-report.xml test-results/*.xml reports/*.xml
+        run: |
+          junit-report-merger \
+            -o merged-report.xml \
+            test-results/*.xml reports/*.xml
 
       - name: Upload merged test report artifact
         uses: actions/upload-artifact@v4

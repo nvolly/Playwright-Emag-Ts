@@ -12,7 +12,7 @@ export default defineConfig({
 
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : 2,
+  workers: process.env.CI ? 1 : undefined,
 
   use: {
     trace: process.env.CI ? "retain-on-failure" : "on",
@@ -29,7 +29,7 @@ export default defineConfig({
       ]
     : [
         ["list"],
-        ["html", { open: "never" }],
+        ["html", { outputFolder: "playwright-report", open: "never" }],
         ["json", { outputFile: "test-results/report.json" }],
       ],
 });
