@@ -1,9 +1,10 @@
 import { defineConfig } from "@playwright/test";
-import * as dotenv from "dotenv";
+import dotenv from "dotenv";
+import path from "path";
 
-dotenv.config({
-  path: `./env/.env.${process.env.ENV}`,
-});
+if (process.env.ENV !== "ci") {
+  dotenv.config({ path: path.resolve(__dirname, ".env/.env.prod") });
+}
 
 export default defineConfig({
   globalSetup: "./tests/global.setup.ts",
@@ -11,7 +12,7 @@ export default defineConfig({
 
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : 2,
+  workers: process.env.CI ? 1 : undefined,
 
   use: {
     trace: process.env.CI ? "retain-on-failure" : "on",
@@ -28,7 +29,7 @@ export default defineConfig({
       ]
     : [
         ["list"],
-        ["html", { open: "never" }],
+        ["html", { outputFolder: "playwright-report", open: "never" }],
         ["json", { outputFile: "test-results/report.json" }],
       ],
 });
