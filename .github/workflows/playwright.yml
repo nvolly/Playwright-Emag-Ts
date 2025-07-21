@@ -1,4 +1,4 @@
-name: E2E Tests
+name: All Tests
 
 on:
   push:
@@ -27,6 +27,7 @@ jobs:
       URL_LOGIN: ${{ secrets.URL_LOGIN }}
       APLIC_URL: ${{ secrets.APLIC_URL }}
       PORTAL_SUBCONT: ${{ secrets.PORTAL_SUBCONT }}
+      API_BASE_URL: ${{ secrets.API_BASE_URL || 'https://crypto-dev.tradeville.ro' }}
 
     steps:
       - name: Checkout code
@@ -53,6 +54,11 @@ jobs:
 
       - name: Run Cucumber tests with JUnit report
         run: npx cucumber-js --format junit:reports/cucumber-report.xml
+
+      - name: Run performance tests
+        run: npx artillery run tests/performance/scenarios/load-test.yml
+        env:
+          CI: true
 
       - name: Verify test result files
         run: |
