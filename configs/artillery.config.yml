@@ -1,0 +1,72 @@
+# Artillery configuration for performance testing
+config:
+  target: "{{ $processEnvironment.API_BASE_URL || 'http://localhost:3000' }}
+  http:
+    timeout: 60
+    maxSockets: 100
+    rejectUnauthorized: false
+  tls:
+    rejectUnauthorized: false
+  processor: "../tests/performance/artillery/functions/custom-functions.js"
+  ensure:
+    p95: 1000  # 95th percentile response time should be under 1000ms
+    maxErrorRate: 0.1  # Error rate should be under 10%
+
+# Common phases for load tests
+phases:
+  - duration: 60
+    arrivalRate: 5
+    name: Warm up
+  - duration: 300
+    arrivalRate: 10
+    rampTo: 50
+    name: Ramp up load
+  - duration: 600
+    arrivalRate: 50
+    name: Sustained load
+  - duration: 60
+    arrivalRate: 50
+    rampTo: 5
+    name: Ramp down
+
+# Default headers for all requests
+defaults:
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+    User-Agent: "Artillery Performance Tests"
+
+# Plugins
+plugins:
+  metrics-by-endpoint: {}
+  ensure: {}
+  publish-metrics:
+    -
+      type: datadog
+      apiKey: ${DATADOG_API_KEY}
+      appKey: ${DATADOG_APP_KEY}
+      metricName: "performance.metrics"
+
+# Custom metrics
+customMetrics:
+  latency:
+    - "http.response_time"
+    - "http.latency"
+  errors:
+    - "http.codes.200"
+    - "http.codes.4xx"
+    - "http.codes.5xx"
+  rates:
+    - "http.request_rate"
+
+# Reporting
+reporting:
+  - 
+    type: json
+    path: "reports/performance/metrics.json"
+  - 
+    type: html
+    path: "reports/performance/report.html"
+  - 
+    type: console
+    prettyPrint: true

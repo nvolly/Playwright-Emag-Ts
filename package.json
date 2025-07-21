@@ -1,24 +1,71 @@
 {
-  "name": "playwright-emag-ts",
+  "name": "playwright-e2e-framework",
   "version": "1.0.0",
+  "description": "End-to-end testing framework with Playwright and TypeScript",
   "main": "index.js",
   "scripts": {
-    "test": "cucumber-js --config=cucumber.js"
+    "test": "playwright test",
+    "test:e2e": "playwright test --config=configs/playwright.config.ts",
+    "test:api": "playwright test --config=configs/playwright.api.config.ts",
+    "test:bdd": "cucumber-js --config=cucumber.js && node scripts/generate-bdd-report.js",
+    "test:e2e:debug": "PWDEBUG=1 playwright test --config=configs/playwright.config.ts",
+    "test:api:debug": "PWDEBUG=1 playwright test --config=configs/playwright.api.config.ts",
+    "test:e2e:ui": "playwright test --ui --config=configs/playwright.config.ts",
+    "test:api:ui": "playwright test --ui --config=configs/playwright.api.config.ts",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write \"**/*.{ts,js,json,md}\"",
+    "prepare": "husky install",
+    "codegen": "playwright codegen",
+    "show-report": "playwright show-report"
   },
-  "keywords": [],
+  "keywords": [
+    "playwright",
+    "typescript",
+    "e2e-testing",
+    "api-testing",
+    "bdd"
+  ],
   "author": "",
-  "license": "ISC",
-  "description": "",
+  "license": "MIT",
   "devDependencies": {
     "@cucumber/cucumber": "^11.3.0",
     "@playwright/test": "^1.54.1",
+    "@types/cucumber": "^6.0.1",
     "@types/node": "^24.0.14",
-    "@types/prompt-sync": "^4.2.3",
-    "prompt-sync": "^4.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-playwright": "^1.5.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.0",
+    "multiple-cucumber-html-reporter": "^3.9.3",
+    "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.9.0",
     "dotenv": "^17.2.0"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "browserslist": {
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

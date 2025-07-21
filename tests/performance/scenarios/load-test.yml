@@ -1,0 +1,100 @@
+# Load testing scenario for the application
+# This simulates a typical user flow through the application
+
+# Import configuration and custom functions
+config:
+  target: "{{ $processEnvironment.API_BASE_URL || 'http://localhost:3000' }}
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: Warm up
+    - duration: 300
+      arrivalRate: 10
+      rampTo: 30
+      name: Ramp up load
+    - duration: 600
+      arrivalRate: 30
+      name: Sustained load
+    - duration: 60
+      arrivalRate: 30
+      rampTo: 5
+      name: Ramp down
+  processor: "../artillery/functions/custom-functions.js"
+  ensure:
+    p95: 2000
+    maxErrorRate: 0.01
+
+# Default headers for all requests
+defaults:
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+    User-Agent: "Artillery Load Test"
+
+# Test scenario simulating user flow
+scenarios:
+  - name: "User authentication and dashboard access"
+    beforeScenario: generateAuthData
+    flow:
+      # 1. Login
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ email }}"
+            password: "{{ password }}"
+          capture:
+            json: "$.tokens.access.token"
+            as: "accessToken"
+      
+      # 2. Get user profile
+      - get:
+          url: "/api/users/me"
+          headers:
+            Authorization: "Bearer {{ accessToken }}"
+      
+      # 3. Browse dashboard
+      - get:
+          url: "/api/dashboard/summary"
+          headers:
+            Authorization: "Bearer {{ accessToken }}"
+      
+      # 4. Simulate some user interactions
+      - get:
+          url: "/api/transactions/recent"
+          headers:
+            Authorization: "Bearer {{ accessToken }}"
+      
+      # 5. Logout
+      - post:
+          url: "/api/auth/logout"
+          headers:
+            Authorization: "Bearer {{ accessToken }}"
+
+# Metrics and reporting
+plugins:
+  metrics-by-endpoint: {}
+  ensure: {}
+  publish-metrics:
+    - type: console
+      interval: 10
+    - type: json
+      path: "../../reports/performance/metrics.json"
+
+# Custom metrics to track
+customMetrics:
+  latency:
+    - "http.response_time"
+    - "http.latency"
+  errors:
+    - "http.codes.200"
+    - "http.codes.4xx"
+    - "http.codes.5xx"
+  rates:
+    - "http.request_rate"
+
+# Reporting configuration
+reporting:
+  - type: html
+    path: "../../reports/performance/report.html"
+  - type: json
+    path: "../../reports/performance/aggregate.json"
