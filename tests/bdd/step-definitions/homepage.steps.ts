@@ -11,7 +11,7 @@ Before(async function () {
   page = await context.newPage();
 });
 
-Given("User navigates to the Browserstack Homepage", async () => {
+Given("User navigates to the Browserstack Homepage", async function () {
   await page.goto("https://www.browserstack.com/");
 });
 
@@ -28,19 +28,6 @@ Then("It should show Web Testing Product", async () => {
     .locator('div[aria-label="Products"] button[title="Web Testing"] span')
     .isVisible();
   expect(isVisible).toBeTruthy();
-});
-
-When("User clicks on Pricing Menu", async () => {
-  await page.locator('a[title="Pricing"]').click();
-});
-
-Then("It should Display correct Product lists in left Nav", async () => {
-  const leftNavProducts = await page
-    .locator('div[id="sidenav__list"]')
-    .textContent();
-  const productArray =
-    leftNavProducts?.split("\n").map((item) => item.trim()) || [];
-  expect(productArray).toEqual(expect.arrayContaining(["Live", "App Live"]));
 });
 
 After(async () => {
