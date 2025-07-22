@@ -23,9 +23,7 @@ jobs:
       COD_USER_PLN: ${{ secrets.COD_USER_PLN }}
       COD_USER_USD: ${{ secrets.COD_USER_USD }}
       PORTAL_URL: ${{ secrets.PORTAL_URL }}
-      PAGE_TITLE: ${{ secrets.PAGE_TITLE }}
       URL_LOGIN: ${{ secrets.URL_LOGIN }}
-      APLIC_URL: ${{ secrets.APLIC_URL }}
       PORTAL_SUBCONT: ${{ secrets.PORTAL_SUBCONT }}
       API_BASE_URL: ${{ secrets.API_BASE_URL }}
 

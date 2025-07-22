@@ -1,13 +1,13 @@
-name: Performance Tests
+name: Artillery & Playwright Tests
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
     paths:
       - 'tests/performance/**'
       - '.github/workflows/performance-tests.yml'
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
     paths:
       - 'tests/performance/**'
       - '.github/workflows/performance-tests.yml'
@@ -21,36 +21,39 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.54.1-focal
       options: --shm-size=2gb
 
-    strategy:
-      matrix:
-        node-version: [18.x]
-
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '18'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
       - name: Install Artillery
-        run: npm install -g artillery@latest
-      
+        run: npm install -g artillery
+
+      - name: Verify TypeScript compilation
+        run: npx tsc --noEmit
+        continue-on-error: true
+
       - name: Run performance tests
         run: |
           mkdir -p reports/performance
           artillery run --output reports/performance/report.json tests/performance/scenarios/load-test.yml
           artillery report reports/performance/report.json -o reports/performance/report.html
         env:
-          API_BASE_URL: ${{ secrets.API_BASE_URL || 'http://localhost:3000' }}
-          
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+
       - name: Upload performance report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: performance-report
           path: reports/performance/
