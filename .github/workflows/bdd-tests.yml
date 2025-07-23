@@ -23,9 +23,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Compile TypeScript (if needed)
-        run: npx tsc
-
       - name: Run Cucumber BDD Tests
         run: npx cucumber-js test
 

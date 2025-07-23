@@ -1,5 +1,5 @@
 import { expect, Page, Locator } from '@playwright/test';
-import BasePage from './page';
+import BasePage from './basePage';
 
 declare global {
   function removeHeaderOverlay(): void;
@@ -468,8 +468,15 @@ export default class PortalTradingPage extends BasePage {
     });
   }
 
-  async gotoDirect(path: string): Promise<void> {
-    await this.page.goto(`${process.env.PORTAL_URL}${path}`);
+  async gotoDirect(): Promise<void> {
+    const baseUrl = process.env.BASE_URL;
+    console.log('Navigating to URL:', baseUrl);
+
+    await this.page.goto(
+      `${baseUrl}/portal/trading.htm?upperLeft=lista&simbol=/portal/trading.htm`
+    );
+
+    await this.page.waitForLoadState('networkidle');
     await this.page.waitForTimeout(2000);
 
     if (await this.page.locator('form.login_form').isVisible()) {

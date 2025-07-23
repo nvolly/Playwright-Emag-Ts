@@ -9,6 +9,7 @@ import {
   Page,
 } from '@playwright/test';
 import PortalTradingPage from '../../../src/pages/genericPages/portalTrading';
+
 interface Account {
   tdvUserId: string;
   dltCode: string;
@@ -52,7 +53,6 @@ declare global {
   }
 }
 
-const API_KEY: string = '63d0c452-6e3d-42a2-820c-541eda629687';
 let token: string = '';
 const BASE_URL: string = 'https://crypto-dev.tradeville.ro';
 const SUPPORTED_SYMBOLS: readonly string[] = [

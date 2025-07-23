@@ -1,60 +1,41 @@
-name: Artillery & Playwright Tests
+name: Playwright & Artillery Tests
 
 on:
   push:
-    branches: [main, develop]
-    paths:
-      - 'tests/performance/**'
-      - '.github/workflows/performance-tests.yml'
+    branches: [main]
   pull_request:
-    branches: [main, develop]
-    paths:
-      - 'tests/performance/**'
-      - '.github/workflows/performance-tests.yml'
+    branches: [main]
   workflow_dispatch:
 
 jobs:
-  performance:
-    timeout-minutes: 90
+  test:
+    name: Run Playwright and Artillery Tests
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.54.1-focal
-      options: --shm-size=2gb
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: 20
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
+      - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Install Artillery
-        run: npm install -g artillery
+      - name: Run Playwright Tests
+        run: npm run test:playwright
 
-      - name: Verify TypeScript compilation
-        run: npx tsc --noEmit
-        continue-on-error: true
+      - name: Run Artillery Tests
+        run: npm run test:artillery
 
-      - name: Run performance tests
-        run: |
-          mkdir -p reports/performance
-          artillery run --output reports/performance/report.json tests/performance/scenarios/load-test.yml
-          artillery report reports/performance/report.json -o reports/performance/report.html
-        env:
-          API_BASE_URL: ${{ secrets.API_BASE_URL }}
-
-      - name: Upload performance report
+      - name: Upload Playwright Test Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: performance-report
-          path: reports/performance/
-          retention-days: 30
+          name: playwright-report
+          path: playwright-report

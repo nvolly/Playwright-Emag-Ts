@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -26,6 +27,7 @@ jobs:
       URL_LOGIN: ${{ secrets.URL_LOGIN }}
       PORTAL_SUBCONT: ${{ secrets.PORTAL_SUBCONT }}
       API_BASE_URL: ${{ secrets.API_BASE_URL }}
+      PLAYWRIGHT_JUNIT_OUTPUT_NAME: test-results/playwright-report.xml
 
     steps:
       - name: Checkout code
@@ -37,47 +39,26 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Install Playwright browsers
         run: npx playwright install
 
-      - name: Create report folders
-        run: |
-          mkdir -p test-results
-          mkdir -p reports
+      - name: Create report folder
+        run: mkdir -p test-results
 
       - name: Run Playwright tests with JUnit report
-        run: npx playwright test
+        run: npx playwright test --reporter=junit
 
-      - name: Run Cucumber tests with JUnit report
-        run: npx cucumber-js --format junit:reports/cucumber-report.xml
-
-      - name: Verify test result files
-        run: |
-          echo "Playwright report:"
-          ls -lh test-results || echo "Missing Playwright report"
-          echo "Cucumber report:"
-          ls -lh reports || echo "Missing Cucumber report"
-
-      - name: Install junit-report-merger
-        run: npm install -g junit-report-merger
-
-      - name: Merge Playwright and Cucumber reports
-        run: |
-          junit-report-merger \
-            -o merged-report.xml \
-            test-results/*.xml reports/*.xml
-
-      - name: Upload merged test report artifact
+      - name: Upload Playwright test report
         uses: actions/upload-artifact@v4
         with:
-          name: merged-junit-report
-          path: merged-report.xml
+          name: playwright-junit-report
+          path: test-results/playwright-report.xml
 
-      - name: Report merged test results to GitHub Checks
+      - name: Report test results to GitHub Checks
         uses: dorny/test-reporter@v1
         with:
-          name: E2E Combined Tests
-          path: merged-report.xml
+          name: Playwright E2E Tests
+          path: test-results/playwright-report.xml
           reporter: junit

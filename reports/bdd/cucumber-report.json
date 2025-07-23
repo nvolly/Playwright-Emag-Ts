@@ -1,0 +1,79 @@
+[
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "homepage-functionality;verify-product-web-testing",
+        "keyword": "Scenario",
+        "line": 3,
+        "name": "Verify Product Web Testing",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 656856500
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "User navigates to the Browserstack Homepage",
+            "match": {
+              "location": "tests\\bdd\\step-definitions\\homepage.steps.ts:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 724595700
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 5,
+            "name": "User clicks on Product Menu",
+            "match": {
+              "location": "tests\\bdd\\step-definitions\\homepage.steps.ts:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 525254399
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 6,
+            "name": "It should show Web Testing Product",
+            "match": {
+              "location": "tests\\bdd\\step-definitions\\homepage.steps.ts:23"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 25898600
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 444141899
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "homepage-functionality",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Homepage Functionality",
+    "tags": [],
+    "uri": "tests\\bdd\\features\\homepage.feature"
+  }
+]
