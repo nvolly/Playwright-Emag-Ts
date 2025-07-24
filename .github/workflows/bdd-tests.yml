@@ -1,4 +1,4 @@
-name: API Tests
+name: BDD Tests (Cucumber.js)
 
 on:
   push:
@@ -8,10 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  api-tests:
+  bdd-tests:
     runs-on: ubuntu-latest
-    env:
-      API_BASE_URL: ${{ secrets.API_BASE_URL }}
 
     steps:
       - name: Checkout repository
@@ -25,12 +23,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run API Tests
-        run: npm run test:api
+      - name: Run Cucumber BDD Tests
+        run: npx cucumber-js test
 
-      - name: Upload API Test Report
+      - name: Upload Cucumber Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: api-test-report
-          path: reports/api/
+          name: cucumber-report
+          path: reports/cucumber/

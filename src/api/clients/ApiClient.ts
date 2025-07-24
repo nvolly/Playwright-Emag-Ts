@@ -14,7 +14,7 @@ type RequestOptions = {
  * API Client for making HTTP requests
  */
 export class ApiClient {
-  private request: APIRequestContext;
+  private request!: APIRequestContext;
   private baseUrl: string;
   public endpoints: ApiEndpoints;
 
@@ -31,7 +31,7 @@ export class ApiClient {
       baseURL: this.baseUrl,
       extraHTTPHeaders: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
       },
     });
     return this;
@@ -105,7 +105,7 @@ export class ApiClient {
       baseURL: this.baseUrl,
       extraHTTPHeaders: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
         ...headers,
       },
     });
@@ -124,12 +124,5 @@ export class ApiClient {
    */
   verifyStatusCode(response: APIResponse, expectedStatus: number): void {
     expect(response.status()).toBe(expectedStatus);
-  }
-
-  /**
-   * Verify response body contains expected data
-   */
-  verifyResponseBody(response: APIResponse, expectedData: any): void {
-    expect(response).toMatchObject(expectedData);
   }
 }
